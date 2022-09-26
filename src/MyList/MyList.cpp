@@ -43,16 +43,16 @@
         this->head_ptr = new MyList::MyList::Item(data);
     }
 
-    // MyList::MyList::MyList(double data[], int size) {
-        // if (size > 0) {
-            // this->head_ptr->setData(data[0]);
-            // int index = 1;
-            // while (size-- > 1) {
-                // this->append(data[index++]);
-            // }
-        // }
-    // }
-
+/*     MyList::MyList::MyList(double data[], int size) {
+ *         if (size > 0) {
+ *             this->head_ptr->setData(data[0]);
+ *             int index = 1;
+ *             while (size-- > 1) {
+ *                 this->append(data[index++]);
+ *             }
+ *         }
+ *     }
+ *  */
     MyList::MyList::~MyList() {
         this->clear();
     }
@@ -102,20 +102,50 @@
     }
 
     void MyList::MyList::removeItem(int index) {
-        if (!isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
-            int current_index = -1; // -1 beacuse need priveouse item
-            while (current_index++ != index) {
-                current_item_ptr = current_item_ptr->getNextNode();
-            }
-            if (current_index == 0) {
-                delete current_item_ptr->getNextNode();
-
-            } else if (!current_item_ptr->isEnd()) {
-                // skip one node
+        if (!this->isVoid()) {
+            if (index == 0) {
+                Item* tmp_item_ptr = this->head_ptr;
+                this->head_ptr = this->head_ptr->getNextNode();
+                delete tmp_item_ptr;
+            } else if (index > 0 && index <= this->size()) {
+                Item* current_item_ptr = this->head_ptr;
+                int current_index = 1;
+                while (current_index++ < index) {
+                    current_item_ptr = current_item_ptr->getNextNode();
+                }
+                Item* tmp_item_ptr = current_item_ptr->getNextNode();
                 current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
-            }
+                delete tmp_item_ptr;
+            } else {
+                // Exception here
+            } 
         }
+    }
+
+    double MyList::MyList::pop(int index) {
+        if (!this->isVoid()) {
+            Item* return_item_ptr = nullptr;
+            if (index == 0) {
+                return_item_ptr = this->head_ptr;
+                this->head_ptr = this->head_ptr->getNextNode();
+            } else if (index > 0 && index <= this->size()) {
+                Item* current_item_ptr = this->head_ptr;
+                int current_index = 1;
+                while (current_index++ < index) {
+                    current_item_ptr = current_item_ptr->getNextNode();
+                }
+                return_item_ptr = current_item_ptr->getNextNode();
+                current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
+            } else {
+                // Exception here
+            } 
+
+        return return_item_ptr->getData();
+        }
+    } 
+  
+    double MyList::MyList::pop() {
+        return this->pop(0);
     }
 
     void MyList::clear() {
@@ -218,12 +248,6 @@
         }
 
         return result_index;
-    }
-
-    std::ostream& operator<<(std::ostream& out, MyList& object) {
-        object.print();
-
-        return out;
     }
 
     double MyList::operator[](int index) {

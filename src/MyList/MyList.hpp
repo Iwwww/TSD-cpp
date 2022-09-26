@@ -3,6 +3,7 @@
 #include <iterator>
 #include <ostream>
 #include <iostream>
+#include "../Exception/Exception.hpp"
 namespace YMM {
 
 class MyList {
@@ -37,6 +38,8 @@ class MyList {
         void append(double& data);
         void insert(int index, const double& data);
         void removeItem(int index);
+        double pop(int index);
+        double pop();
         void clear();
         void print();
         int size() const;
@@ -47,7 +50,6 @@ class MyList {
         int rfind(const double& data, const int begin);
         int rfind(const double& data, const int begin, const int end);
 
-        std::ostream& operator<<(std::ostream&);
         double operator[](int);
         
 
