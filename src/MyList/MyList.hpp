@@ -35,7 +35,7 @@ class MyList {
         ~MyList();
 
         bool isVoid() const;
-        void append(double& data);
+        void append(double data);
         void insert(int index, const double& data);
         void removeItem(int index);
         double pop(int index);

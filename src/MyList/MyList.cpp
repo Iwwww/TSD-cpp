@@ -61,7 +61,7 @@
         return (this->head_ptr == nullptr) ? true : false;
     }
 
-    void MyList::append(double& data) {
+    void MyList::append(double data) {
         Item* item_ptr = new Item(data);
         if (!isVoid()) {
             Item* current_item_ptr = this->head_ptr;
@@ -82,7 +82,7 @@
                 Item* tmp_item_ptr = this->head_ptr;
                 this->head_ptr = item_ptr;
                 item_ptr->setNextNodePtr(tmp_item_ptr);
-            } else {
+            } else if (index > 0) {
                 Item* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index && !current_item_ptr->isEnd()) {
@@ -95,6 +95,8 @@
                 } else {
                     current_item_ptr->setNextNodePtr(item_ptr);
                 }
+            } else {
+                Exception("Index Error");
             }
         } else {
             this->head_ptr = item_ptr;
@@ -117,7 +119,7 @@
                 current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
                 delete tmp_item_ptr;
             } else {
-                // Exception here
+                Exception("Index Error");
             } 
         }
     }
@@ -137,7 +139,7 @@
                 return_item_ptr = current_item_ptr->getNextNode();
                 current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
             } else {
-                // Exception here
+                Exception("Index Error");
             } 
 
         return return_item_ptr->getData();
@@ -199,8 +201,10 @@
         int size = this->size();
         if (end == -1) {
             end = size;
+            Exception("Out of range");
         }
         if (begin > size || begin < 0) {
+            Exception("Out of range");
             return -2;
         }
 
@@ -214,6 +218,8 @@
             if (current_item_ptr->getData() == data && index >= begin) {
                 result_index = index;
             }
+        } else {
+            Exception("Empty list");
         }
 
         return result_index;
@@ -231,9 +237,11 @@
         int result_index = -1;
         int size = this->size();
         if (end == -1) {
+            Exception("Out of range");
             end = size;
         }
         if (begin > size || begin < 0) {
+            Exception("Out of range");
             return -2;
         }
 
@@ -245,6 +253,8 @@
                 }
                 current_item_ptr = current_item_ptr->getNextNode();
             }
+        } else {
+            Exception("Empty list");
         }
 
         return result_index;
