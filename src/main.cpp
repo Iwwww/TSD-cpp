@@ -1,54 +1,78 @@
 #include "MyList/MyList.hpp"
 #include "Exception/Exception.hpp"
-#include "CMenu/CMenu.h"
-#include "CMenu/CMenuItem.h"
 #include <fstream>
 #include <ostream>
 #include <string>
 
 using namespace YMM;
-YMM::MyList loadData() {
+
+/* 
+std::cout << "Меню" << std::endl
+<< "1. Append" << std::endl
+<< "2. Insert" << std::endl
+<< "3. Pop" << std::endl
+       Remove
+<< "4. Clear" << std::endl
+<< "5. Print" << std::endl
+<< "6. Size" << std::endl
+<< "7. Find" << std::endl
+<< "8. Rfind" << std::endl
+<< "9. IsEmpty" << std::endl
+<< "10. Считать из файла" << std::endl
+<< "11. Записать в файл" << std::endl
+<< "12. Заданте по варианту" << std::endl
+<< "0. Выход" << std::endl
+<< "->";
+ * */
+enum MENU {
+    EXIT=0,
+    APPEND,
+    INSERT,
+    POP,
+    REMOVE,
+    CLAER,
+    PRINT,
+    SIZE,
+    FIND,
+    RFIND,
+    ISEMPTY,
+    LOADDATA,
+    WRITEFILE,
+    VARIANTTASK,
+};
+
+YMM::MyList* loadData() {
     std::string line;
-    std::ifstream file("data.txt");
-    YMM::MyList list;
+    std::string file_name = "data1.txt";
+    std::ifstream file(file_name);
+    YMM::MyList* list = new YMM::MyList;
     if (file.is_open()) {
         while (std::getline(file, line)) {
             double num = std::stod(line);
-            list.append(num);
+            list->append(num);
         }
+    } else {
+        YMM::Exception("File 'data1.txt' is not open");
     }
     return list;
 }
 
 void writeData(YMM::MyList& list) {
     std::string data;
-    std::ofstream file("data.txt");
+    std::string file_name = "data2.txt";
+    std::ofstream file(file_name);
     if (file.is_open()) {
         int size = list.size();
         for (int i = 0; i < size; i++) {
             file << list[i] << std::endl;
         }
+    } else {
+        YMM::Exception("File 'data2.txt' is not open");
     }
 }
-
-double inputD() {
-    double num = 0;
-    bool flag = 1;
-    while (flag) {
-        if (std::cin >> num) {
-            flag = 0;
-        } else {
-            YMM::Exception("Invalid Input");
-            std::cin.clear();
-            while (std::cin.get() != '\n');
-        }
-    }
-
-    return num;
-}
-
-double inputI() {
-    int num = 0;
+template<typename T>
+T input() {
+    T num = 0;
     bool flag = 1;
     while (flag) {
         if (std::cin >> num) {
@@ -64,23 +88,29 @@ double inputI() {
 }
 
 void append(YMM::MyList& list) {
-    std::cout << "Input num: " << std::endl;
-    double num = inputD();
+    std::cout << "Input num: ";
+    double num = input<double>();
     list.append(num);
 }
 
 void insert(YMM::MyList& list) {
-    std::cout << "input index: " << std::endl;
-    double index = inputI();
-    std::cout << "input num: " << std::endl;
-    double num = inputD();
+    std::cout << "input index: ";
+    int index = input<int>();
+    std::cout << "input num: ";
+    double num = input<double>();
     list.insert(index, num);
 }
 
 void pop(YMM::MyList& list) {
-    std::cout << "input index: " << std::endl;
-    double index = inputI();
-    std::cout << "pop: " << list.pop(index);
+    std::cout << "input index: ";
+    int index = input<int>();
+    std::cout << "pop: " << list.pop(index) << std::endl;
+}
+
+void remove(YMM::MyList& list) {
+    std::cout << "input index: ";
+    int index = input<int>();
+    list.removeItem(index);
 }
 
 void clear(YMM::MyList& list) {
@@ -98,23 +128,23 @@ void size(YMM::MyList& list) {
 }
 
 void find(YMM::MyList& list) {
-    std::cout << "input num: " << std::endl;
-    double num = inputD();
-    std::cout << "input start range: " << std::endl;
-    int start = inputI();
-    std::cout << "input end range: " << std::endl;
-    int end = inputI();
-    std::cout << "founded element: " << list.find(num, start, end);
+    std::cout << "input num: ";
+    double num = input<double>();
+    std::cout << "input start range: ";
+    int start = input<int>();
+    std::cout << "input end range: ";
+    int end = input<int>();
+    std::cout << "founded element: " << list.find(num, start, end) << std::endl;
 }
 
 void rfind(YMM::MyList& list) {
-    std::cout << "input num: " << std::endl;
-    double num = inputD();
-    std::cout << "input start range: " << std::endl;
-    int start = inputI();
-    std::cout << "input end range: " << std::endl;
-    int end = inputI();
-    std::cout << "founded element: " << list.find(num, start, end);
+    std::cout << "input num: ";
+    double num = input<double>();
+    std::cout << "input start range: ";
+    int start = input<int>();
+    std::cout << "input end range: ";
+    int end = input<int>();
+    std::cout << "founded element: " << list.find(num, start, end) << std::endl;
 }
 
 void isEmpty(YMM::MyList& list) {
@@ -157,18 +187,20 @@ void variantTask(YMM::MyList& list) {
 
 void printMenu() {
 std::cout << "Меню" << std::endl
-<< "1. Append" << std::endl
-<< "2. Insert" << std::endl
-<< "3. Pop" << std::endl
-<< "4. Clear" << std::endl
-<< "5. Print" << std::endl
-<< "6. Size" << std::endl
-<< "7. Find" << std::endl
-<< "8. Rfind" << std::endl
-<< "9. IsEmpty" << std::endl
-<< "10. Записать в файл" << std::endl
-<< "11. Заданте по варианту" << std::endl
-<< "0. Выход" << std::endl
+<< APPEND << ". Append" << std::endl
+<< INSERT << ". Insert" << std::endl
+<< POP << ". Pop" << std::endl
+<< REMOVE << ". Remove" << std::endl
+<< CLAER << ". Clear" << std::endl
+<< PRINT << ". Print" << std::endl
+<< SIZE << ". Size" << std::endl
+<< FIND << ". Find" << std::endl
+<< RFIND << ". Rfind" << std::endl
+<< ISEMPTY << ". IsEmpty" << std::endl
+<< LOADDATA << ". Считать из файла" << std::endl
+<< WRITEFILE << ". Записать в файл" << std::endl
+<< VARIANTTASK << ". Заданте по варианту" << std::endl
+<< EXIT << ". Выход" << std::endl
 << "->";
 }
 
@@ -176,46 +208,55 @@ int main() {
     using namespace YMM;
 
     // data
-    MyList list = loadData();
+    MyList list;
  
     while (true) {
         printMenu();
-        int choice = inputI();
+        int choice = input<int>();
         switch (choice) {
-        case 1:
+        case APPEND:
             append(list);
             break;
-        case 2:
+        case INSERT:
             insert(list);
-            break; case 3:
+            break; 
+        case POP:
             pop(list);
             break;
-        case 4:
+        case REMOVE:
+            remove(list);
+            break;
+        case CLAER:
             clear(list);
             break;
-        case 5:
+        case PRINT:
             print(list);
             break;
-        case 6:
+        case SIZE:
             size(list);
             break;
-        case 7:
+        case FIND:
             find(list);
             break;
-        case 8:
+        case RFIND:
             rfind(list);
             break;
-        case 9:
+        case ISEMPTY:
             isEmpty(list);
             break;
-        case 10:
+        case LOADDATA:
+            list = *loadData();
+            break;
+        case WRITEFILE:
             writeData(list);
-        case 11:
+            break;
+        case VARIANTTASK:
             variantTask(list);
             break;
-        case 0:
+        case EXIT:
             return 0;
         }
+        std::cout << "\n";
     }
     return 0;
 }
