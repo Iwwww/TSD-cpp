@@ -43,6 +43,10 @@
         this->head_ptr = new MyList::MyList::Item(data);
     }
 
+    MyList::MyList(const MyList& ref_Point) {
+        // this->head_ptr = ref_Point.getHeadPtr();
+    }
+
 /*     MyList::MyList::MyList(double data[], int size) {
  *         if (size > 0) {
  *             this->head_ptr->setData(data[0]);
@@ -78,11 +82,14 @@
     void MyList::insert(int index, const double& data) {
         Item* item_ptr = new Item(data);
         if (!isVoid()) {
+            int size = this->size();
+            index = cutInput(index, size);
+            
             if (index == 0) {
                 Item* tmp_item_ptr = this->head_ptr;
                 this->head_ptr = item_ptr;
                 item_ptr->setNextNodePtr(tmp_item_ptr);
-            } else if (index > 0) {
+            } else {
                 Item* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index && !current_item_ptr->isEnd()) {
@@ -95,8 +102,6 @@
                 } else {
                     current_item_ptr->setNextNodePtr(item_ptr);
                 }
-            } else {
-                Exception("Index Error");
             }
         } else {
             this->head_ptr = item_ptr;
@@ -105,11 +110,12 @@
 
     void MyList::MyList::removeItem(int index) {
         if (!this->isVoid()) {
+            index = cutInput(index, this->size());
             if (index == 0) {
                 Item* tmp_item_ptr = this->head_ptr;
                 this->head_ptr = this->head_ptr->getNextNode();
                 delete tmp_item_ptr;
-            } else if (index > 0 && index <= this->size()) {
+            } else {// if (index > 0 && index <= this->size()) {
                 Item* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index) {
@@ -118,8 +124,8 @@
                 Item* tmp_item_ptr = current_item_ptr->getNextNode();
                 current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
                 delete tmp_item_ptr;
-            } else {
-                Exception("Index Error");
+            // } else {
+                // // Exception("Index Error");
             } 
         }
     }
@@ -130,6 +136,7 @@
             if (index == 0) {
                 return_item_ptr = this->head_ptr;
                 this->head_ptr = this->head_ptr->getNextNode();
+                return return_item_ptr->getData();
             } else if (index > 0 && index <= this->size()) {
                 Item* current_item_ptr = this->head_ptr;
                 int current_index = 1;
@@ -138,11 +145,11 @@
                 }
                 return_item_ptr = current_item_ptr->getNextNode();
                 current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
+                return return_item_ptr->getData();
             } else {
                 Exception("Index Error");
             } 
 
-        return return_item_ptr->getData();
         }
     } 
   
@@ -233,16 +240,22 @@
         return find(data, begin, -1);
     }
 
-    int MyList::rfind(const double& data, const int begin, int end) {
+    int MyList::rfind(const double& data, int begin, int end) {
         int result_index = -1;
         int size = this->size();
-        if (end == -1) {
-            Exception("Out of range");
+        if (end > size || end < 0) {
             end = size;
+            Exception("Out of range");
         }
         if (begin > size || begin < 0) {
+            begin = 0;
             Exception("Out of range");
-            return -2;
+        }
+        if (abs(begin) > size) {
+            begin %= size; 
+        }
+        if (begin < 0) {
+            begin += size;
         }
 
         if (!this->isVoid()) {
@@ -258,6 +271,21 @@
         }
 
         return result_index;
+    }
+
+    MyList::Item* MyList::getHeadPtr() const {
+        return this->head_ptr;
+    }
+
+    MyList MyList::copy() {
+        MyList list;
+        Item* item = this->head_ptr;
+        while (this->head_ptr) {
+            list.append(item->getData());
+            item = item->getNextNode();
+        }
+
+        return list;
     }
 
     double MyList::operator[](int index) {

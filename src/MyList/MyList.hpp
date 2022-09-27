@@ -30,6 +30,7 @@ class MyList {
 
         MyList();
         MyList(double);
+        MyList(const MyList& ref_Point);
         // add: construct MyList with arr of items [1, 2, 3]
         // MyList(double [], int);
         ~MyList();
@@ -47,14 +48,29 @@ class MyList {
         int find(const double& data, const int begin);
         int find(const double& data, const int begin, int end);
         int rfind(const double& data);
-        int rfind(const double& data, const int begin);
-        int rfind(const double& data, const int begin, const int end);
+        int rfind(const double& data, int begin);
+        int rfind(const double& data, int begin, const int end);
+        Item* getHeadPtr() const;
+        MyList copy();
 
         double operator[](int);
         
 
     private:
         Item* head_ptr = nullptr;
+
+        template<typename T>
+        T cutInput(T index, T end) {
+            if (abs(index) >= end) {
+                index %= end;
+                Exception e;
+                e.warning("Index Cut");
+            }
+            if (index < 0) {
+                index += end + 1; 
+            }
+            return index;
+        }
 
 };
 }
