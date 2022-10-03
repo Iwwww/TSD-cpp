@@ -16,7 +16,6 @@ namespace YMM {
     void File::initStream() {
         if (this->isOpen()) {
             this->out->close();
-            this->exception.warning("Force close file stream");
         } else {
             std::fstream out;
             this->out = &out;
@@ -35,7 +34,6 @@ namespace YMM {
             this->mode =  std::ios::in | std::ios::out;
         else
             this->mode = std::ios::in;
-            this->exception.error("Invalid mode: " + _mode);
 
         this->out->open(file_name, this->mode);
     }

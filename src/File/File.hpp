@@ -2,13 +2,12 @@
 #include <fstream>
 #include <ios>
 #include <string>
-#include "../Exception/Exception.hpp"
 
 namespace YMM {
     class File {
         public:
             File();
-            File(std::string, std::string);
+            File(std::string file_name, std::string mode);
             ~File();
 
             void setFileName(std::string);
@@ -24,7 +23,6 @@ namespace YMM {
             std::string file_name{};
             std::fstream* out = nullptr;
             std::ios::openmode mode{};
-            Exception exception;
 
             void initStream();
     };
