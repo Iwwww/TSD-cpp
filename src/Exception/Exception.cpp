@@ -1,7 +1,4 @@
 #include "Exception.hpp"
-#include "../File/File.hpp"
-#include <chrono>
-#include <iterator>
 
 namespace YMM {
     Exception::Exception(std::string error) {
@@ -15,11 +12,12 @@ namespace YMM {
 
     void Exception::logging(std::string msg, std::string log_type) {
         auto now = std::chrono::system_clock::now();
-        std::time_t end_time = std::chrono::system_clock::to_time_t(now);
+        time_t end_time = std::chrono::system_clock::to_time_t(now);
         std::string line = std::string("[LOG] << " + log_type + ": " + std::ctime(&end_time) + " " + msg.c_str() + "\n");
 
-        File file("../log.log", "w");
+        File file(this->file_name, "append");
         file.write(line);
+        file.close();
 
     }
 
@@ -33,5 +31,9 @@ namespace YMM {
 
     void Exception::warning(std::string msg) {
         logging(msg, log_type_warning);
+    }
+
+    void Exception::setFileName(std::string file_name) {
+        this->file_name = file_name;
     }
 }
