@@ -82,4 +82,16 @@ namespace YMM {
         }
         return text;
     }
+
+    bool File::readLine(std::string &str) {
+
+        if (this->mode == std::ios::in || this->mode == std::ios::ate || std::ios::in | std::ios::out) {
+            std::getline(*this->out, str);
+        }
+        if (this->out->eof()) {
+            return 0;
+        }
+
+        return 1;
+    } 
 }
