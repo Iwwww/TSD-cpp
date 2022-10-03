@@ -17,10 +17,9 @@ namespace YMM {
     void File::initStream() {
         if (this->isOpen()) {
             this->out->close();
-        } else {
-            std::fstream out;
-            this->out = &out;
         }
+        std::fstream* out = new std::fstream;
+        this->out = out;
     }
 
     void File::open(std::string file_name, std::string _mode) {
@@ -33,10 +32,12 @@ namespace YMM {
             this->mode = std::ios::out;
         else if (_mode == "rw")
             this->mode =  std::ios::in | std::ios::out;
+        else if (_mode == "append")
+            this->mode =  std::ios::app;
         else
             this->mode = std::ios::in;
 
-        this->out->open(file_name, this->mode);
+        this->out->open(file_name, this->mode); 
     }
 
     void File::close() {
@@ -51,15 +52,15 @@ namespace YMM {
             if (this->out->is_open()) {
                 flag = 1;
             }
-        } else {
-            this->exception.warning("Empty Stream Ptr");
         }
 
         return flag;
     }
 
     void File::write(std::string text) {
-        *out << text;
+        if (isOpen()) {
+            *this->out << text;
+        }
     }
 
     std::string File::read() {

@@ -1,6 +1,5 @@
 #pragma once
 #include <fstream>
-#include <ios>
 #include <string>
 
 namespace YMM {
@@ -20,9 +19,9 @@ namespace YMM {
             std::ostream& getStream();
 
         private:
-            std::string file_name{};
+            std::string file_name = "log.log";
             std::fstream* out = nullptr;
-            std::ios::openmode mode{};
+            std::ios::openmode mode = std::ios::in;
 
             void initStream();
     };
