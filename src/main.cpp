@@ -1,10 +1,16 @@
+#include "File/File.hpp"
 #include "MyList/MyList.hpp"
 #include "Exception/Exception.hpp"
 #include <fstream>
+#include <iterator>
 #include <ostream>
 #include <string>
 
 using namespace YMM;
+
+
+const std::string LOAD_FILE_NAME = "data1.txt";
+const std::string WRITE_FILE_NAME = "data2.txt";
 
 /* 
 std::cout << "Меню" << std::endl
@@ -43,32 +49,25 @@ enum MENU {
 
 YMM::MyList* loadData() {
     std::string line;
-    std::string file_name = "data1.txt";
-    std::ifstream file(file_name);
-    YMM::MyList* list = new YMM::MyList;
-    if (file.is_open()) {
-        while (std::getline(file, line)) {
-            double num = std::stod(line);
-            list->append(num);
-        }
-    } else {
-        YMM::Exception("File 'data1.txt' is not open");
+    YMM::MyList* list_ptr = new YMM::MyList;
+    YMM::File file(LOAD_FILE_NAME, "r");
+    
+    while(file.readLine(line)) {
+        double num = std::stod(line);
+        list_ptr->append(num);
     }
-    return list;
+    file.close();
+
+    return list_ptr;
 }
 
 void writeData(YMM::MyList& list) {
-    std::string data;
-    std::string file_name = "data2.txt";
-    std::ofstream file(file_name);
-    if (file.is_open()) {
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            file << list[i] << std::endl;
-        }
-    } else {
-        YMM::Exception("File 'data2.txt' is not open");
+    int size = list.size();
+    File file(WRITE_FILE_NAME, "w");
+    for (int i = 0; i < size; i++) {
+        file.write(std::to_string(list[i])+"\n");
     }
+    file.close();
 }
 template<typename T>
 T input() {
@@ -157,32 +156,12 @@ void isEmpty(YMM::MyList& list) {
 
 
 void variantTask(YMM::MyList& list) {
-    MyList positive_list;
-    for (int i = 0; i < list.size(); i++) {
-        if (list[i] < 0) {
-            double tmp_i = list.pop(i);
-            positive_list.append(tmp_i);
-        }
+    int size = list.size();
+    double sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += list[i] * (size - i);
     }
-
-    MyList negative_list;
-    std::cout << std::endl;
-    for (int i = list.size() - 1; i >= 0; i--) {
-        negative_list.append(list[i]);
-    }
-
-    list.clear();
-
-    for (int i = 0; i < negative_list.size(); i++) {
-        list.append(negative_list[i]);
-    }
-
-    for (int i = 0; i < positive_list.size(); i++) {
-        list.append(positive_list[i]);
-    }
-
-    positive_list.clear();
-    negative_list.clear();
+    std::cout << "x[i] * (n - i) = " << sum << std::endl;
 }
 
 void printMenu() {
