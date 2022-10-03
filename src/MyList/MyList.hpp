@@ -1,22 +1,23 @@
 #pragma once
-
-#include <iterator>
 #include <ostream>
 #include <iostream>
 #include "../Exception/Exception.hpp"
+
 namespace YMM {
 
 class MyList {
 
     public:
-    class Item {
+    class Node {
         public:
-            Item(double data);
+            Node(double data);
 
             void setData(double data);
-            void setNextNodePtr(Item*);
+            void setNextNodePtr(Node*);
+            void setPrevNodePtr(Node*);
             
-            Item* getNextNode();
+            Node* getNextNode();
+            Node* getPrevNode();
             double getData();
             bool isEnd();
             void print();
@@ -25,7 +26,8 @@ class MyList {
         
         private:
             double data{};
-            Item* next_node = nullptr;
+            Node* prev_node = nullptr;
+            Node* next_node = nullptr;
     };
 
         MyList();
@@ -50,14 +52,14 @@ class MyList {
         int rfind(const double& data);
         int rfind(const double& data, int begin);
         int rfind(const double& data, int begin, const int end);
-        Item* getHeadPtr() const;
-        MyList copy();
+        Node* getHeadPtr() const;
+        MyList& copy();
 
         double operator[](int);
         
 
     private:
-        Item* head_ptr = nullptr;
+        Node* head_ptr = nullptr;
 
         template<typename T>
         T cutInput(T index, T end) {
@@ -67,7 +69,7 @@ class MyList {
                 e.warning("Index Cut");
             }
             if (index < 0) {
-                index += end + 1; 
+                index += end; 
             }
             return index;
         }

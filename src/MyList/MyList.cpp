@@ -2,35 +2,43 @@
 
  namespace YMM {
     #pragma region Item
-    void MyList::Item::setData(double data) {
+    void MyList::Node::setData(double data) {
         this->data = data;
     }
 
-    void MyList::Item::setNextNodePtr(Item* ptr) {
+    void MyList::Node::setNextNodePtr(Node* ptr) {
         this->next_node = ptr;
     }
 
-    MyList::MyList::Item::Item(double data) {
+    void MyList::Node::setPrevNodePtr(Node* ptr) {
+        this->prev_node = ptr;
+    }
+
+    MyList::MyList::Node::Node(double data) {
         this->data = data;
     }
 
-    MyList::MyList::Item* MyList::MyList::Item::getNextNode() {
+    MyList::MyList::Node* MyList::MyList::Node::getNextNode() {
         return this->next_node;
     }
 
-    double MyList::Item::getData() {
+    MyList::MyList::Node* MyList::MyList::Node::getPrevNode() {
+        return this->prev_node;
+    }
+
+    double MyList::Node::getData() {
         return this->data;
     }
 
-    bool MyList::MyList::Item::isEnd() {
+    bool MyList::MyList::Node::isEnd() {
         return (this->next_node == nullptr) ? true : false;
     }
 
-    void MyList::Item::print() {
+    void MyList::Node::print() {
         std::cout << this->data;
     }
 
-    std::ostream& operator<<(std::ostream& out, MyList::Item& object) {
+    std::ostream& operator<<(std::ostream& out, MyList::Node& object) {
         object.print();
 
         return out;
@@ -40,7 +48,7 @@
     MyList::MyList::MyList() {};
 
     MyList::MyList::MyList(double data) {
-        this->head_ptr = new MyList::MyList::Item(data);
+        this->head_ptr = new MyList::MyList::Node(data);
     }
 
     MyList::MyList(const MyList& ref_Point) {
@@ -66,13 +74,14 @@
     }
 
     void MyList::append(double data) {
-        Item* item_ptr = new Item(data);
+        Node* item_ptr = new Node(data);
         if (!isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
+            Node* current_item_ptr = this->head_ptr;
             while (!current_item_ptr->isEnd()) {
                 current_item_ptr = current_item_ptr->getNextNode();
             }
             current_item_ptr->setNextNodePtr(item_ptr);
+            item_ptr->setPrevNodePtr(current_item_ptr);
 
         } else {
             this->head_ptr = item_ptr;
@@ -80,27 +89,31 @@
     }
 
     void MyList::insert(int index, const double& data) {
-        Item* item_ptr = new Item(data);
+        Node* item_ptr = new Node(data);
         if (!isVoid()) {
             int size = this->size();
             index = cutInput(index, size);
             
             if (index == 0) {
-                Item* tmp_item_ptr = this->head_ptr;
+                Node* tmp_item_ptr = this->head_ptr;
                 this->head_ptr = item_ptr;
                 item_ptr->setNextNodePtr(tmp_item_ptr);
+                if (size != 0) tmp_item_ptr->setPrevNodePtr(item_ptr);
             } else {
-                Item* current_item_ptr = this->head_ptr;
+                Node* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index && !current_item_ptr->isEnd()) {
                     current_item_ptr = current_item_ptr->getNextNode();
                 }
                 if (!current_item_ptr->isEnd()) {
-                    Item* tmp_item_ptr = current_item_ptr->getNextNode();
+                    Node* tmp_item_ptr = current_item_ptr->getNextNode();
                     current_item_ptr->setNextNodePtr(item_ptr);
+                    item_ptr->setPrevNodePtr(current_item_ptr);
                     item_ptr->setNextNodePtr(tmp_item_ptr);
+                    tmp_item_ptr->setPrevNodePtr(item_ptr);
                 } else {
                     current_item_ptr->setNextNodePtr(item_ptr);
+                    item_ptr->setPrevNodePtr(current_item_ptr);
                 }
             }
         } else {
@@ -110,42 +123,58 @@
 
     void MyList::MyList::removeItem(int index) {
         if (!this->isVoid()) {
-            index = cutInput(index, this->size());
+            int size = this->size();
+            index = cutInput(index, size);
             if (index == 0) {
-                Item* tmp_item_ptr = this->head_ptr;
+                Node* tmp_item_ptr = this->head_ptr;
                 this->head_ptr = this->head_ptr->getNextNode();
+                this->head_ptr->setPrevNodePtr(nullptr);
                 delete tmp_item_ptr;
             } else {// if (index > 0 && index <= this->size()) {
-                Item* current_item_ptr = this->head_ptr;
+                Node* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index) {
                     current_item_ptr = current_item_ptr->getNextNode();
                 }
-                Item* tmp_item_ptr = current_item_ptr->getNextNode();
-                current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
+                Node* tmp_item_ptr = current_item_ptr->getNextNode();
+                if (index != size - 1) {
+                    current_item_ptr->setNextNodePtr(tmp_item_ptr->getNextNode());
+                    current_item_ptr->getNextNode()->setPrevNodePtr(current_item_ptr);
+                } else {
+                    current_item_ptr->setNextNodePtr(nullptr);
+                }
                 delete tmp_item_ptr;
-            // } else {
-                // // Exception("Index Error");
             } 
         }
     }
 
     double MyList::MyList::pop(int index) {
         if (!this->isVoid()) {
-            Item* return_item_ptr = nullptr;
+            Node* return_item_ptr = nullptr;
+            int size = this->size();
             if (index == 0) {
                 return_item_ptr = this->head_ptr;
                 this->head_ptr = this->head_ptr->getNextNode();
-                return return_item_ptr->getData();
-            } else if (index > 0 && index <= this->size()) {
-                Item* current_item_ptr = this->head_ptr;
+                this->head_ptr->setPrevNodePtr(nullptr);
+                double data = return_item_ptr->getData();
+                delete return_item_ptr;
+                return data;
+            } else if (index > 0 && index < size) {
+                Node* current_item_ptr = this->head_ptr;
                 int current_index = 1;
                 while (current_index++ < index) {
                     current_item_ptr = current_item_ptr->getNextNode();
                 }
                 return_item_ptr = current_item_ptr->getNextNode();
-                current_item_ptr->setNextNodePtr(current_item_ptr->getNextNode()->getNextNode());
-                return return_item_ptr->getData();
+                if (index != size - 1) {
+                    current_item_ptr->setNextNodePtr(return_item_ptr->getNextNode());
+                    current_item_ptr->getNextNode()->setPrevNodePtr(current_item_ptr);
+                } else {
+                    current_item_ptr->setNextNodePtr(nullptr);
+                }
+                double data = return_item_ptr->getData();
+                delete return_item_ptr;
+                return data;
             } else {
                 Exception("Index Error");
             } 
@@ -154,13 +183,13 @@
     } 
   
     double MyList::MyList::pop() {
-        return this->pop(0);
+        return this->pop(this->size() - 1);
     }
 
     void MyList::clear() {
         if (!this->isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
-            Item* tmp_ptr = nullptr;
+            Node* current_item_ptr = this->head_ptr;
+            Node* tmp_ptr = nullptr;
             while (current_item_ptr != nullptr) {
                 tmp_ptr = current_item_ptr;
                 current_item_ptr = current_item_ptr->getNextNode();
@@ -172,7 +201,7 @@
 
     void MyList::MyList::print() {
         if (!this->isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
+            Node* current_item_ptr = this->head_ptr;
             while (!current_item_ptr->isEnd()) {
                 std::cout << *current_item_ptr << " ";
                 current_item_ptr = current_item_ptr->getNextNode();
@@ -184,7 +213,7 @@
     int MyList::size() const {
         int size = 0;
         if (!this->isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
+            Node* current_item_ptr = this->head_ptr;
             size = 1;
             while (!current_item_ptr->isEnd()) {
                 size++;
@@ -206,24 +235,21 @@
     int MyList::find(const double& data, const int begin, int end) {
         int result_index = -1;
         int size = this->size();
-        if (end == -1) {
-            end = size;
-            Exception("Out of range");
-        }
-        if (begin > size || begin < 0) {
-            Exception("Out of range");
-            return -2;
-        }
 
         if (!this->isVoid()) {
-            int index = 0;
-            Item* current_item_ptr = this->head_ptr;
-            while ((current_item_ptr->getData() != data || index < begin) && index <= end) {
-                current_item_ptr = current_item_ptr->getNextNode();
-                index++;
-            }
-            if (current_item_ptr->getData() == data && index >= begin) {
-                result_index = index;
+            if (begin >= 0 && end < size && begin < end) {
+                int index = 0;
+                Node* current_item_ptr = this->head_ptr;
+                while ((current_item_ptr->getData() != data || index < begin) && index++ < end - 1) {
+                    current_item_ptr = current_item_ptr->getNextNode();
+                }
+                if (current_item_ptr->getData() == data && index >= begin) {
+                    result_index = index;
+                }
+            } else {
+                Exception e;
+                e.error("Out of range");
+                result_index = -2;
             }
         } else {
             Exception("Empty list");
@@ -243,61 +269,56 @@
     int MyList::rfind(const double& data, int begin, int end) {
         int result_index = -1;
         int size = this->size();
-        if (end > size || end < 0) {
-            end = size;
-            Exception("Out of range");
-        }
-        if (begin > size || begin < 0) {
-            begin = 0;
-            Exception("Out of range");
-        }
-        if (abs(begin) > size) {
-            begin %= size; 
-        }
-        if (begin < 0) {
-            begin += size;
-        }
 
         if (!this->isVoid()) {
-            Item* current_item_ptr = this->head_ptr;
-            for (int index = 0; index <= end; index++) {
-                if (current_item_ptr->getData() == data && index >= begin) {
-                    result_index = index;
+            if (begin >= 0 && end < size && begin < end) {
+                Node* current_item_ptr = this->head_ptr;
+                for (int index = 0; index <= end; index++) {
+                    if (current_item_ptr->getData() == data && index >= begin) {
+                        result_index = index;
+                    }
+                    current_item_ptr = current_item_ptr->getNextNode();
                 }
-                current_item_ptr = current_item_ptr->getNextNode();
+            } else {
+                Exception e;
+                e.error("Out of range");
+                result_index = -2;
             }
         } else {
-            Exception("Empty list");
+            Exception e;
+            e.error("Empty list");
         }
 
         return result_index;
     }
 
-    MyList::Item* MyList::getHeadPtr() const {
+    MyList::Node* MyList::getHeadPtr() const {
         return this->head_ptr;
     }
 
-    MyList MyList::copy() {
-        MyList list;
-        Item* item = this->head_ptr;
+    MyList& MyList::copy() {
+        MyList* list = new MyList;
+        Node* item = this->head_ptr;
         while (this->head_ptr) {
-            list.append(item->getData());
+            list->append(item->getData());
             item = item->getNextNode();
         }
 
-        return list;
+        return *list;
     }
 
     double MyList::operator[](int index) {
-        if (index > 0 || index < 0) {
-            int size = this->size();
-            index %= size;
-            if (index < 0) {
-                index += size; // rest (not add)
-            }
-        }
+        int size = this->size();
+        index = cutInput(index, size);
+        /* if (index > 0 || index < 0) {
+         *     int size = this->size();
+         *     index %= size;
+         *     if (index < 0) {
+         *         index += size; // rest (not add)
+         *     }
+         * } */
 
-        Item* current_item_ptr = this->head_ptr;
+        Node* current_item_ptr = this->head_ptr;
         for (int i = 0; i < index; i++) {
             current_item_ptr = current_item_ptr->getNextNode();
         }
