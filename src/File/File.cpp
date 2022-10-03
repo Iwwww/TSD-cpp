@@ -1,4 +1,5 @@
 #include "File.hpp"
+#include <fstream>
 
 namespace YMM {
     File::File() {}
@@ -69,7 +70,7 @@ namespace YMM {
                 text += line;
             }
         } else {
-            this->exception.error(&"Invalid reading mode: " [this->mode]);
+            // this->exception.error(&"Invalid reading mode: " [this->mode]);
         }
     }
 }
