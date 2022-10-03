@@ -14,6 +14,7 @@ namespace YMM {
             void close();
             bool isOpen();
             void write(std::string);
+            std::string readLine();
             std::string read();
 
             std::ostream& getStream();

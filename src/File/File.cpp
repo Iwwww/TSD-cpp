@@ -1,5 +1,6 @@
 #include "File.hpp"
 #include <fstream>
+#include <string>
 
 namespace YMM {
     File::File() {}
@@ -63,15 +64,22 @@ namespace YMM {
         }
     }
 
+    std::string File::readLine() {
+        std::string line{};
+        if (this->mode == std::ios::in || this->mode == std::ios::ate || std::ios::in | std::ios::out) {
+            std::getline(*this->out, line);
+        }
+        return line;
+    }
+
     std::string File::read() {
+        std::string line{};
         std::string text{};
-        char line[100];
-        if (this->mode == std::ios::in || this->mode == std::ios::ate) {
-            while (this->out->getline(line, 100)) {
+        if (this->mode == std::ios::in || this->mode == std::ios::ate || std::ios::in | std::ios::out) {
+            while (std::getline(*this->out, line)) {
                 text += line;
             }
-        } else {
-            // this->exception.error(&"Invalid reading mode: " [this->mode]);
         }
+        return text;
     }
 }
