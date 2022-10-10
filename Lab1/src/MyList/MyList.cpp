@@ -46,14 +46,20 @@
     }
     #pragma endregion Item
 
-    MyList::MyList::MyList() {};
+    MyList::MyList() {};
 
-    MyList::MyList::MyList(double data) {
+    MyList::MyList(double data) {
         this->head_ptr = new MyList::MyList::Node(data);
     }
 
-    MyList::MyList(const MyList& ref_Point) {
-        // this->head_ptr = ref_Point.getHeadPtr();
+    MyList::MyList(const MyList& _list) {
+        MyList* list_ptr = new MyList;
+        Node* current_item_ptr = _list.getHeadPtr();
+        while (current_item_ptr != nullptr) {
+            list_ptr->append(current_item_ptr->getData());
+            current_item_ptr = current_item_ptr->getNextNode();
+        }
+        this->head_ptr = list_ptr->getHeadPtr();
     }
 
 /*     MyList::MyList::MyList(double data[], int size) {
