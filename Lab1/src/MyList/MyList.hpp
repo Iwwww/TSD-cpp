@@ -33,8 +33,6 @@ class MyList {
         MyList();
         MyList(double);
         MyList(const MyList& my_list);
-        // add: construct MyList with arr of items [1, 2, 3]
-        // MyList(double [], int);
         ~MyList();
 
         bool isVoid() const;

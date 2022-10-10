@@ -1,5 +1,4 @@
 #include "MyList.hpp"
-#include <cstdlib>
 
  namespace YMM {
     #pragma region Item
@@ -62,16 +61,6 @@
         this->head_ptr = list_ptr->getHeadPtr();
     }
 
-/*     MyList::MyList::MyList(double data[], int size) {
- *         if (size > 0) {
- *             this->head_ptr->setData(data[0]);
- *             int index = 1;
- *             while (size-- > 1) {
- *                 this->append(data[index++]);
- *             }
- *         }
- *     }
- *  */
     MyList::MyList::~MyList() {
         this->clear();
     }
@@ -327,13 +316,5 @@
         }
 
         return current_item_ptr->getData();
-    }
-
-    void MyList::setLogFileName(std::string file_name) {
-        this->log_file_name = file_name;
-    }
-
-    std::string MyList::getLogFileName() {
-        return this->log_file_name;
     }
 }
