@@ -31,14 +31,14 @@ void writeData(YMM::MyList* list_ptr, std::string file_name) {
     file.close();
 }
 template<typename T>
-T input(std::string log_file) {
+T input() {
     T num = 0;
     bool flag = 1;
     while (flag) {
         if (std::cin >> num) {
             flag = 0;
         } else {
-            YMM::Exception("Invalid Input", log_file);
+            YMM::Exception("Invalid Input");
             std::cin.clear();
             while (std::cin.get() != '\n');
         }
@@ -138,6 +138,9 @@ void variantTask(std::any* params) {
     std::cout << "x[i] * (n - i) = " << sum << std::endl;
 }
 
+
+std::string YMM::Exception::log_file_name = "log.log";
+
 int main(int argc, char *argv[]) {
     using namespace YMM;
 
@@ -149,13 +152,14 @@ int main(int argc, char *argv[]) {
         load_data_file = argv[1];
         write_data_file = argv[2];
         log_file = argv[3];
+
+        Exception::setLogFileName(log_file);
     }
+
 
     // data
     MyList* list_ptr = new MyList;
     list_ptr = loadData(load_data_file);
-    list_ptr->setLogFileName(log_file);
-
     std::any* params = new std::any{list_ptr};
 
     Menu menu("Main", std::vector<Menu>{
