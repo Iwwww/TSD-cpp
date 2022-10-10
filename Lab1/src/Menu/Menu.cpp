@@ -42,6 +42,7 @@ namespace YMM {
                     // exit
                     flag = false;
                 } else {
+                    // run submenu
                     menus[select].run();
                 }
 
