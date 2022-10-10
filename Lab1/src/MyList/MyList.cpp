@@ -307,14 +307,14 @@
     }
 
     MyList& MyList::copy() {
-        MyList* list = new MyList;
-        Node* item = this->head_ptr;
-        while (this->head_ptr) {
-            list->append(item->getData());
-            item = item->getNextNode();
+        MyList* list_ptr = new MyList;
+        Node* current_item_ptr = this->head_ptr;
+        while (current_item_ptr != nullptr) {
+            list_ptr->append(current_item_ptr->getData());
+            current_item_ptr = current_item_ptr->getNextNode();
         }
 
-        return *list;
+        return *list_ptr;
     }
 
     double MyList::operator[](int index) {
