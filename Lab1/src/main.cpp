@@ -30,27 +30,11 @@ void writeData(YMM::MyList* list_ptr, std::string file_name) {
     }
     file.close();
 }
-template<typename T>
-T input() {
-    T num = 0;
-    bool flag = 1;
-    while (flag) {
-        if (std::cin >> num) {
-            flag = 0;
-        } else {
-            YMM::Exception("Invalid Input");
-            std::cin.clear();
-            while (std::cin.get() != '\n');
-        }
-    }
-
-    return num;
-}
 
 void append(std::any* params) {
     YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
     std::cout << "Input num: ";
-    double num = input<double>(list_ptr->getLogFileName());
+    double num = YMM::Menu::input<double>();
     list_ptr->append(num);
 
     params = new std::any(list_ptr);
@@ -59,23 +43,23 @@ void append(std::any* params) {
 void insert(std::any* params) {
     YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
     std::cout << "input index: ";
-    int index = input<int>(list_ptr->getLogFileName());
+    int index = YMM::Menu::input<int>();
     std::cout << "input num: ";
-    double num = input<double>(list_ptr->getLogFileName());
+    double num = YMM::Menu::input<double>();
     list_ptr->insert(index, num);
 }
 
 void pop(std::any* params) {
     YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
     std::cout << "input index: ";
-    int index = input<int>(list_ptr->getLogFileName());
+    int index = YMM::Menu::input<int>();
     std::cout << "pop: " << list_ptr->pop(index) << std::endl;
 }
 
 void remove(std::any* params) {
     YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
     std::cout << "input index: ";
-    int index = input<int>(list_ptr->getLogFileName());
+    int index = YMM::Menu::input<int>();
     list_ptr->removeItem(index);
 }
 
@@ -99,22 +83,22 @@ void size(std::any* params) {
 void find(std::any* params) {
     YMM::MyList* list_ptr= std::any_cast<YMM::MyList*>(*params);
     std::cout << "input num: ";
-    double num = input<double>(list_ptr->getLogFileName());
+    double num = YMM::Menu::input<double>();
     std::cout << "input start range: ";
-    int start = input<int>(list_ptr->getLogFileName());
+    int start = YMM::Menu::input<int>();
     std::cout << "input end range: ";
-    int end = input<int>(list_ptr->getLogFileName());
+    int end = YMM::Menu::input<int>();
     std::cout << "founded element: " << list_ptr->find(num, start, end) << std::endl;
 }
 
 void rfind(std::any* params) {
     YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
     std::cout << "input num: ";
-    double num = input<double>(list_ptr->getLogFileName());
+    double num = YMM::Menu::input<double>();
     std::cout << "input start range: ";
-    int start = input<int>(list_ptr->getLogFileName());
+    int start = YMM::Menu::input<int>();
     std::cout << "input end range: ";
-    int end = input<int>(list_ptr->getLogFileName());
+    int end = YMM::Menu::input<int>();
     std::cout << "founded element: " << list_ptr->find(num, start, end) << std::endl;
 }
 
