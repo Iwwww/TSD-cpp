@@ -1,11 +1,8 @@
 #include "Menu.hpp"
-#include <chrono>
-#include <iterator>
-#include <string>
-#include <vector>
 
 namespace YMM {
-    Menu::Menu(std::string lable, func function, std::any* params) { this->lable = lable;
+    Menu::Menu(std::string lable, func function, std::any* params) { 
+        this->lable = lable;
         this->function = function;
         this->params = params;
     }
@@ -26,17 +23,16 @@ namespace YMM {
     void Menu::run() {
         bool flag = true;
         while (flag) {
-            int select{};
+            int select = -1;
             printMenu();
 
             if (this->function == nullptr) {
-                do {
+                while (select < 0 || select > this->menus.size()) {
                     std::cout << "Select >> ";
-                    std::cin >> select;
-                } while (select == -1 || select > menus.size());
-
+                    select = input<int>();
+                    std::cout << std::endl;
+                }
                 select--;
-                std::cout << std::endl;
 
                 if (select == -1) {
                     // exit
