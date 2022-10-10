@@ -172,7 +172,7 @@
                 delete return_item_ptr;
                 return data;
             } else {
-                Exception("Index Error", this->log_file_name);
+                Exception::error("Index Error");
             } 
 
         }
@@ -243,13 +243,11 @@
                     result_index = index;
                 }
             } else {
-                Exception e;
-                e.setFileName(this->log_file_name);
-                e.error("Out of range");
+                Exception::error("Out of range");
                 result_index = -2;
             }
         } else {
-            Exception("Empty list", this->log_file_name);
+            Exception::error("Empty list");
         }
 
         return result_index;
@@ -277,15 +275,11 @@
                     current_item_ptr = current_item_ptr->getNextNode();
                 }
             } else {
-                Exception e;
-                e.setFileName(this->log_file_name);
-                e.error("Out of range");
+                Exception::error("Out of range");
                 result_index = -2;
             }
         } else {
-            Exception e;
-            e.setFileName(this->log_file_name);
-            e.error("Empty list");
+            Exception::error("Empty list");
         }
 
         return result_index;

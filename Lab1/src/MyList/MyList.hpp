@@ -1,7 +1,7 @@
 #pragma once
+#include "../Exception/Exception.hpp"
 #include <ostream>
 #include <iostream>
-#include "../Exception/Exception.hpp"
 
 namespace YMM {
 
@@ -53,29 +53,22 @@ class MyList {
         Node* getHeadPtr() const;
         MyList& copy();
 
-        void setLogFileName(std::string);
-        std::string getLogFileName();
-
         double operator[](int);
         
 
     private:
         Node* head_ptr = nullptr;
-        std::string log_file_name = "log.log";
 
         template<typename T>
         T cutInput(T index, T end) {
             if (abs(index) >= end) {
                 index %= end;
-                Exception e;
-                e.setFileName(this->log_file_name);
-                e.warning("Index Cut");
+                Exception::warning("Index Cut");
             }
             if (index < 0) {
                 index += end; 
             }
             return index;
         }
-
 };
 }
