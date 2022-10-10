@@ -156,6 +156,10 @@ int main(int argc, char *argv[]) {
                     Menu("Remove", remove, params),
                     Menu("Clear", clear, params)
                     }, params),
+            Menu("Find", std::vector<Menu>{
+                    Menu("Find", find, params),
+                    Menu("RFind", rfind, params)
+                    }, params),
             Menu("List Info", std::vector<Menu>{
                     Menu("Print", print, params),
                     Menu("Size", size, params),
