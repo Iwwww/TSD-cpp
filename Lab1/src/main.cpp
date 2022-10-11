@@ -148,27 +148,27 @@ int main(int argc, char *argv[]) {
 
     Menu menu("Main", std::vector<Menu>{
             Menu("Add", std::vector<Menu>{
-                    Menu("Append", append, params),
-                    Menu("Insert", insert, params)
-                    }, params),
+                    Menu("Append", append),
+                    Menu("Insert", insert)
+                    }),
             Menu("Put Away", std::vector<Menu>{
-                    Menu("Pop", pop, params),
-                    Menu("Remove", remove, params),
-                    Menu("Clear", clear, params)
-                    }, params),
+                    Menu("Pop", pop),
+                    Menu("Remove", remove),
+                    Menu("Clear", clear)
+                    }),
             Menu("Find", std::vector<Menu>{
-                    Menu("Find", find, params),
-                    Menu("RFind", rfind, params)
-                    }, params),
+                    Menu("Find", find),
+                    Menu("RFind", rfind)
+                    }),
             Menu("List Info", std::vector<Menu>{
-                    Menu("Print", print, params),
-                    Menu("Size", size, params),
-                    Menu("Is Empty", isEmpty, params)
-                    }, params),
-            Menu("Variant Task", variantTask, params),
-            }, params);
+                    Menu("Print", print),
+                    Menu("Size", size),
+                    Menu("Is Empty", isEmpty)
+                    }),
+            Menu("Variant Task", variantTask),
+            });
             
-    menu.run();
+    menu.run(params);
 
     writeData(list_ptr, write_data_file);
 

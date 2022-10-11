@@ -1,16 +1,14 @@
 #include "Menu.hpp"
 
 namespace YMM {
-    Menu::Menu(std::string lable, func function, std::any* params) { 
+    Menu::Menu(std::string lable, func function) { 
         this->lable = lable;
         this->function = function;
-        this->params = params;
     }
 
-    Menu::Menu(std::string lable, std::vector<Menu> menus, std::any* params) {
+    Menu::Menu(std::string lable, std::vector<Menu> menus) {
         this->lable = lable;
         this->menus = menus;
-        this->params = params;
     }
 
     Menu::Menu(const Menu& menu) {
@@ -20,7 +18,8 @@ namespace YMM {
         this->params = menu.params;
     }
 
-    void Menu::run() {
+    void Menu::run(std::any* params) {
+        this->params = params;
         bool flag = true;
         while (flag) {
             int select = -1;
@@ -39,7 +38,7 @@ namespace YMM {
                     flag = false;
                 } else {
                     // run submenu
-                    menus[select].run();
+                    menus[select].run(this->params);
                 }
 
             } else {
