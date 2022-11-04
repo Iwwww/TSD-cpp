@@ -9,12 +9,12 @@ namespace YMM {
 
     class Menu {
         public:
-            using func = void(*)(std::any*);
+            using func = void(*)(std::vector<std::any>*);
             Menu(std::string lable, func function);
             Menu(std::string lable, std::vector<Menu> menus);
             Menu(const Menu& menu);
 
-            void run(std::any* params);
+            void run(std::vector<std::any>* params);
             void printMenu();
             std::string getLable();
 
@@ -40,6 +40,5 @@ namespace YMM {
             std::string lable{};
             std::vector<Menu> menus{};
             func function = nullptr;
-            std::any* params = nullptr;
     };
 }

@@ -22,22 +22,23 @@ YMM::MyList* loadData(std::string file_name) {
     return list_ptr;
 }
 
-void writeData(YMM::MyList* list_ptr, std::string file_name) {
-    int size = list_ptr->size();
+void writeData(YMM::MyList list, std::string file_name) {
+    int size = list.size();
     File file(file_name, "w");
     for (int i = 0; i < size; i++) {
-        file.write(std::to_string((*list_ptr)[i])+"\n");
+        file.write(std::to_string((list)[i])+"\n");
     }
     file.close();
 }
 
-void append(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void append(std::vector<std::any>* params) {
+    // YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+    auto* list_ptr = (std::any_cast<YMM::MyList*>((*params)[0]));
     std::cout << "Input num: ";
     double num = YMM::Menu::input<double>();
     list_ptr->append(num);
 
-    params = new std::any(list_ptr);
+    // params = new std::any(list_ptr);
 }
 
 void insert(std::any* params) {
@@ -68,8 +69,9 @@ void clear(std::any* params) {
     list_ptr->clear();
 }
 
-void print(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void print(std::vector<std::any>* params) {
+    // YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+    auto* list_ptr = (std::any_cast<YMM::MyList*>((*params)[0]));
     std::cout << "list print: ";
     list_ptr->print();
     std::cout << std::endl;
@@ -136,41 +138,45 @@ int main(int argc, char *argv[]) {
         load_data_file = argv[1];
         write_data_file = argv[2];
         log_file = argv[3];
-
-        Exception::setLogFileName(log_file);
     }
+
+    Exception::setLogFileName(log_file);
 
 
     // data
-    MyList* list_ptr = new MyList;
+    /* MyList* list_ptr = new MyList;
+     * list_ptr = loadData(load_data_file); */
+    MyList* list_ptr = nullptr;
     list_ptr = loadData(load_data_file);
-    std::any* params = new std::any{list_ptr};
+    std::vector<std::any>* params = new std::vector<std::any>{
+        list_ptr
+    };
 
     Menu menu("Main", std::vector<Menu>{
             Menu("Add", std::vector<Menu>{
-                    Menu("Append", append),
-                    Menu("Insert", insert)
+                    Menu("Append", append)
+                    // Menu("Insert", insert)
                     }),
             Menu("Put Away", std::vector<Menu>{
-                    Menu("Pop", pop),
-                    Menu("Remove", remove),
-                    Menu("Clear", clear)
+                    // Menu("Pop", pop),
+                    // Menu("Remove", remove),
+                    // Menu("Clear", clear)
                     }),
             Menu("Find", std::vector<Menu>{
-                    Menu("Find", find),
-                    Menu("RFind", rfind)
+                    // Menu("Find", find),
+                    // Menu("RFind", rfind)
                     }),
             Menu("List Info", std::vector<Menu>{
-                    Menu("Print", print),
-                    Menu("Size", size),
-                    Menu("Is Empty", isEmpty)
-                    }),
-            Menu("Variant Task", variantTask),
+                    Menu("Print", print)
+                    // Menu("Size", size),
+                    // Menu("Is Empty", isEmpty)
+                    })
+            // Menu("Variant Task", variantTask),
             });
             
     menu.run(params);
 
-    writeData(list_ptr, write_data_file);
+    writeData(*list_ptr, write_data_file);
 
     return 0;
 }
