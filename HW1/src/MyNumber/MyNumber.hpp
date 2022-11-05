@@ -1,11 +1,12 @@
 #pragma once
 #include <iostream>
 #include <math.h>
+#include <vector>
 #include "../Exception/Exception.hpp"
 
 namespace YMM {
     /* const int BITES = 4; */
-    const int SIZE = 10;
+    const int SIZE = 1024;
     class MyNumber {
         public:
             /* class Digit {
@@ -19,17 +20,31 @@ namespace YMM {
             MyNumber();
             MyNumber(int);
             MyNumber(std::string);
+            MyNumber(const MyNumber& _number);
             ~MyNumber();
 
-            void add(MyNumber&, MyNumber&);
+            void add(MyNumber&);
+            void pow(int);
+            void multily(int);
+            void multily(MyNumber&); 
+            void setMantis(std::vector<short int>);
+            void setOffset(short int offset);
+            void setSign(bool sign);
+            void shiftRight(short int digit);
+            void shiftLeft(short int digit);
+            void normolize();
+            void align(MyNumber&);
 
             friend std::ostream& operator<<(std::ostream &out, const MyNumber& obj);
             friend std::istream& operator>>(std::istream &in, MyNumber& obj);
                 
         
         private:
+            int getFree();
+            void pushLeft();
+
+            short int mantis[SIZE]{}; // stores like: 000000012345
             short int offset = 0;
-            short int mantis[SIZE]{}; // 000000012345
             bool sign = 0;
 
             // union {
