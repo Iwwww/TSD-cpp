@@ -92,6 +92,7 @@ MyTree::Node* MyTree::_insert(Node* t, int data) {
 }
 
 void MyTree::clear() {
+    if (this->getRootPtr() == nullptr) return;
     this->_clear(this->getRootPtr());
 }
 
