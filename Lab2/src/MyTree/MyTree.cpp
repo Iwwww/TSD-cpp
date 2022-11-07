@@ -146,6 +146,13 @@ MyTree::Node* MyTree::getRootPtr() const {
     return this->root_ptr;
 }
 
+std::vector<int> MyTree::getItems() {
+    vector<int> vec{};
+    if (this->getRootPtr() == nullptr) return vec;
+    this->_getItems(this->getRootPtr(), vec);
+    return vec;
+}
+
 MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) {
     vec.push_back(t->getData());
     if (t->isEnd()) {
