@@ -27,8 +27,8 @@ namespace YMM {
         short int mem = 0;
         MyNumber old_number = *this;
         for (int i = 1; i < degree; i++) {
-            std::cout << "i = " << i << std::endl;
-            std::cout << "this " << *this << std::endl;
+            // std::cout << "i = " << i << std::endl;
+            // std::cout << "this " << *this << std::endl;
             this->multily(old_number);
         }
 

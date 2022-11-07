@@ -119,7 +119,7 @@ void MyTree::MyTree::printTree(Node* t, int n) const {
     }
 }
 
-int MyTree::elementsOnLevel(int level) {
+int MyTree::elementsOnLevel(int level) const {
     int return_value = 0;
     Node* root_ptr = this->getRootPtr();
     if (root_ptr != nullptr) {
@@ -142,18 +142,38 @@ MyTree::Node* MyTree::_elementsOnLevel(Node* t, int& return_value, int current_l
     return t;
 }
 
+void MyTree::printElementsOnLevel(int level) const {
+    if (this->getRootPtr() != nullptr) {
+        this->_printElementsOnLevel(this->getRootPtr(), 0, level);
+    }
+}
+
+MyTree::Node* MyTree::_printElementsOnLevel(Node* t, int current_level, int level) const {
+    if (level == current_level) {
+        std::cout << t->getData() << " ";
+    } else {
+        if (t->isEnd()) return t;
+        current_level++;
+        _printElementsOnLevel(t->getLeftNode(), current_level, level);
+        _printElementsOnLevel(t->getRightNode(), current_level, level);
+        current_level--;
+    }
+
+    return t;
+}
+
 MyTree::Node* MyTree::getRootPtr() const {
     return this->root_ptr;
 }
 
-std::vector<int> MyTree::getItems() {
+std::vector<int> MyTree::getItems() const {
     vector<int> vec{};
     if (this->getRootPtr() == nullptr) return vec;
     this->_getItems(this->getRootPtr(), vec);
     return vec;
 }
 
-MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) {
+MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) const {
     vec.push_back(t->getData());
     if (t->isEnd()) {
         return t;
@@ -164,14 +184,14 @@ MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) {
     return t;
 }
 
-int MyTree::size() {
+int MyTree::size() const {
     int size = 0;
     if (this->getRootPtr() == nullptr) return 0;
     _size(this->getRootPtr(), size);
     return size;
 }
 
-MyTree::Node* MyTree::_size(Node* t, int& size) {
+MyTree::Node* MyTree::_size(Node* t, int& size) const {
     size++;
     if (t->isEnd()) {
         return t;

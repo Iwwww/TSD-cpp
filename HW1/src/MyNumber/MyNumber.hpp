@@ -5,18 +5,9 @@
 #include "../Exception/Exception.hpp"
 
 namespace YMM {
-    /* const int BITES = 4; */
-    const int SIZE = 1024;
+    const int SIZE = 32;
     class MyNumber {
         public:
-            /* class Digit {
-             *     public:
-             *         Digit();
-             *         ~Digit();
-             *         
-             *     // private:
-             *         bool digit[BITES]{};
-             * }; */
             MyNumber();
             MyNumber(int);
             MyNumber(std::string);
@@ -46,21 +37,6 @@ namespace YMM {
             short int mantis[SIZE]{}; // stores like: 000000012345
             short int offset = 0;
             bool sign = 0;
-
-            // union {
-                // bool d:4;
-                // struct {
-                    // bool a0:1;
-                    // bool a1:1;
-                    // bool a2:1;
-                    // bool a3:1;
-                    // // bool a4:1;
-                    // // bool a5:1;
-                    // // bool a6:1;
-                    // // bool a7:1;
-                // } byte;
-            // } digit;
-
     };
 
 }
