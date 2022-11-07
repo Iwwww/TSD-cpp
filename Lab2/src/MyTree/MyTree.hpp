@@ -37,12 +37,14 @@ public:
     int elementsOnLevel(int);
     Node* getRootPtr() const;
     std::vector<int> getItems();
+    int size();
 
 private:
     Node* _clear(Node*);
     Node* _insert(Node*, int data);
     Node* _elementsOnLevel(Node*, int&, int, int level) const;
     Node* _getItems(Node*, std::vector<int>&);
+    Node* _size(Node*, int&);
 
     Node* root_ptr = nullptr;
 

@@ -156,9 +156,21 @@ MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) {
     return t;
 }
 
-std::vector<int> MyTree::getItems() {
-    vector<int> vec{};
-    this->_getItems(this->getRootPtr(), vec);
-    return vec;
+int MyTree::size() {
+    int size = 0;
+    if (this->getRootPtr() == nullptr) return 0;
+    _size(this->getRootPtr(), size);
+    return size;
+}
+
+MyTree::Node* MyTree::_size(Node* t, int& size) {
+    size++;
+    if (t->isEnd()) {
+        return t;
+    }
+
+    _size(t->getLeftNode(), size);
+    _size(t->getRightNode(), size);
+    return t;
 }
 } // namespace YMM
