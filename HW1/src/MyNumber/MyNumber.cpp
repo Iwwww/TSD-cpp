@@ -161,6 +161,11 @@ namespace YMM {
         return out;
     }
 
+    std::ostream& operator<<(std::ostream &out, const MyNumber* obj) {
+        std::cout << *obj;
+        return out;
+    }
+
     std::istream& operator>>(std::istream &in, MyNumber& obj) {
         /* example:
          * +0.123456E5
@@ -284,5 +289,12 @@ namespace YMM {
                 obj.offset--;
             }
         }
+    }
+
+    std::istream& operator>>(std::istream &in, MyNumber* obj) {
+        MyNumber tmp;
+        std::cin >> tmp;
+        *obj = tmp;
+        return in;
     }
 }

@@ -5,7 +5,7 @@
 #include "../Exception/Exception.hpp"
 
 namespace YMM {
-    const int SIZE = 32;
+    const int SIZE = 64;
     class MyNumber {
         public:
             MyNumber();
@@ -27,7 +27,9 @@ namespace YMM {
             void align(MyNumber&);
 
             friend std::ostream& operator<<(std::ostream &out, const MyNumber& obj);
+            friend std::ostream& operator<<(std::ostream &out, const MyNumber* obj);
             friend std::istream& operator>>(std::istream &in, MyNumber& obj);
+            friend std::istream& operator>>(std::istream &in, MyNumber* obj);
                 
         
         private:
