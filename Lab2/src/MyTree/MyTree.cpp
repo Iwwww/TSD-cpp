@@ -94,19 +94,25 @@ MyTree::Node* MyTree::_insert(Node* t, int data) {
 void MyTree::clear() {
     if (this->getRootPtr() == nullptr) return;
     this->_clear(this->getRootPtr());
+    this->root_ptr = nullptr;
 }
 
 MyTree::Node* MyTree::_clear(Node* t) {
     if (t->isEnd()) return t;
-    t->setLeftNodePtr(_clear(t->getLeftNode()));
-    delete t->getLeftNode();
-    t->setRightNodePtr(_clear(t->getRightNode()));
-    delete t->getRightNode();
+
+    if (t->getLeftNode() != nullptr) {
+        t->setLeftNodePtr(_clear(t->getLeftNode()));
+        delete t->getLeftNode();
+    }
+    if (t->getRightNode() != nullptr) {
+        t->setRightNodePtr(_clear(t->getRightNode()));
+        delete t->getRightNode();
+    }
 
     return t;
 }
 
-void MyTree::MyTree::printTree(Node* t, int n) const {
+void MyTree::MyTree::printTree(Node* t, int n) {
     if (t != nullptr) {
         printTree(t->getRightNode(), n + 1);
         for (int i = 0; i < n; i++) {
@@ -119,7 +125,7 @@ void MyTree::MyTree::printTree(Node* t, int n) const {
     }
 }
 
-int MyTree::elementsOnLevel(int level) const {
+int MyTree::elementsOnLevel(int level) {
     int return_value = 0;
     Node* root_ptr = this->getRootPtr();
     if (root_ptr != nullptr) {
@@ -128,34 +134,42 @@ int MyTree::elementsOnLevel(int level) const {
     return return_value;
 }
 
-MyTree::Node* MyTree::_elementsOnLevel(Node* t, int& return_value, int current_level, int level) const {
+MyTree::Node* MyTree::_elementsOnLevel(Node* t, int& return_value, int current_level, int level) {
     if (level == current_level) {
         return_value++;
     } else {
         if (t->isEnd()) return t;
         current_level++;
-        _elementsOnLevel(t->getLeftNode(), return_value, current_level, level);
-        _elementsOnLevel(t->getRightNode(), return_value, current_level, level);
+        if (t->getLeftNode() != nullptr) {
+            _elementsOnLevel(t->getLeftNode(), return_value, current_level, level);
+        }
+        if (t->getRightNode() != nullptr) {
+            _elementsOnLevel(t->getRightNode(), return_value, current_level, level);
+        }
         current_level--;
     }
 
     return t;
 }
 
-void MyTree::printElementsOnLevel(int level) const {
+void MyTree::printElementsOnLevel(int level) {
     if (this->getRootPtr() != nullptr) {
         this->_printElementsOnLevel(this->getRootPtr(), 0, level);
     }
 }
 
-MyTree::Node* MyTree::_printElementsOnLevel(Node* t, int current_level, int level) const {
+MyTree::Node* MyTree::_printElementsOnLevel(Node* t, int current_level, int level) {
     if (level == current_level) {
         std::cout << t->getData() << " ";
     } else {
         if (t->isEnd()) return t;
         current_level++;
-        _printElementsOnLevel(t->getLeftNode(), current_level, level);
-        _printElementsOnLevel(t->getRightNode(), current_level, level);
+        if (t->getLeftNode() != nullptr) {
+            _printElementsOnLevel(t->getLeftNode(), current_level, level);
+        }
+        if (t->getRightNode() != nullptr) {
+            _printElementsOnLevel(t->getRightNode(), current_level, level);
+        }
         current_level--;
     }
 
@@ -166,21 +180,25 @@ MyTree::Node* MyTree::getRootPtr() const {
     return this->root_ptr;
 }
 
-std::vector<int> MyTree::getItems() const {
+std::vector<int> MyTree::getItems() {
     vector<int> vec{};
     if (this->getRootPtr() == nullptr) return vec;
     this->_getItems(this->getRootPtr(), vec);
     return vec;
 }
 
-MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) const {
+MyTree::Node* MyTree::_getItems(Node* t, std::vector<int>& vec) {
     vec.push_back(t->getData());
     if (t->isEnd()) {
         return t;
     }
 
-    _getItems(t->getLeftNode(), vec);
-    _getItems(t->getRightNode(), vec);
+    if (t->getLeftNode() != nullptr) {
+        _getItems(t->getLeftNode(), vec);
+    }
+    if (t->getRightNode() != nullptr) {
+        _getItems(t->getRightNode(), vec);
+    }
     return t;
 }
 
@@ -192,13 +210,44 @@ int MyTree::size() const {
 }
 
 MyTree::Node* MyTree::_size(Node* t, int& size) const {
-    size++;
-    if (t->isEnd()) {
-        return t;
+    if (t != nullptr) {
+        size++;
+        if (t->isEnd()) {
+            return t;
+        }
+        if (t->getLeftNode() != nullptr) {
+            _size(t->getLeftNode(), size);
+        }
+        if (t->getRightNode() != nullptr) {
+            _size(t->getRightNode(), size);
+        }
+    }
+    return t;
+}
+
+void MyTree::remove(int data) {
+    if (this->getRootPtr() == nullptr) return;
+    this->_remove(this->getRootPtr(), nullptr, data);
+}
+
+MyTree::Node* MyTree::_remove(Node* t, Node* prev_t, int data) {
+    if (t->getData() == data) {
+        if (prev_t != nullptr) {
+            prev_t->setLeftNodePtr(t->getLeftNode());
+            prev_t->setRightNodePtr(t->getRightNode());
+        }
+        delete t;
+    } else {
+        if (t->isEnd()) return t;
+        prev_t = t;
+        if (t->getLeftNode() != nullptr) {
+            _remove(t->getLeftNode(), prev_t, data);
+        }
+        if (t->getRightNode() != nullptr) {
+            _remove(t->getRightNode(), prev_t, data);
+        }
     }
 
-    _size(t->getLeftNode(), size);
-    _size(t->getRightNode(), size);
     return t;
 }
 } // namespace YMM

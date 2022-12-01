@@ -33,21 +33,22 @@ public:
     bool isVoid() const;
     void clear();
     void insert(int data);
-    void printTree(Node*, int) const;
-    int elementsOnLevel(int) const;
-    void printElementsOnLevel(int) const;
+    void printTree(Node*, int);
+    int elementsOnLevel(int);
+    void printElementsOnLevel(int);
     Node* getRootPtr() const;
-    std::vector<int> getItems() const;
+    std::vector<int> getItems();
     int size() const;
-// TODO:remove method
+    void remove(int);
 
 private:
     Node* _clear(Node*);
     Node* _insert(Node*, int data);
-    Node* _elementsOnLevel(Node*, int&, int, int level) const;
-    Node* _printElementsOnLevel(Node*, int, int level) const;
-    Node* _getItems(Node*, std::vector<int>&) const;
+    Node* _elementsOnLevel(Node*, int&, int, int level);
+    Node* _printElementsOnLevel(Node*, int, int level);
+    Node* _getItems(Node*, std::vector<int>&);
     Node* _size(Node*, int&) const;
+    Node* _remove(Node*, Node*, int);
 
     Node* root_ptr = nullptr;
 
