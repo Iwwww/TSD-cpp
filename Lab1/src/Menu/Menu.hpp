@@ -1,44 +1,50 @@
 #pragma once
-#include "../Exception/Exception.hpp"
+#include <any>
 #include <iostream>
 #include <string>
-#include <any>
 #include <vector>
 
 namespace YMM {
 
-    class Menu {
-        public:
-            using func = void(*)(std::vector<std::any>*);
-            Menu(std::string lable, func function);
-            Menu(std::string lable, std::vector<Menu> menus);
-            Menu(const Menu& menu);
+class Menu {
+public:
+  using func = void (*)(std::vector<std::any>);
+  Menu(std::string lable, func function);
+  Menu(std::string lable, std::vector<Menu> menus);
+  Menu(std::string lable, func function, std::vector<std::any> params);
+  Menu(std::string lable, std::vector<Menu> menus,
+       std::vector<std::any> params);
+  Menu(const Menu &menu);
 
-            void run(std::vector<std::any>* params);
-            void printMenu();
-            std::string getLable();
+  void run();
+  void printMenu();
+  std::string getLable();
 
-            template<typename T>
-            static T input() {
-                T num = 0;
-                bool flag = true;
-                while (flag) {
-                    if (std::cin >> num) {
-                        flag = false;
-                    } else {
-                        Exception::warning("Invalid Input");
-                        std::cin.clear();
-                        while (std::cin.get() != '\n');
-                    }
-                }
+  template <typename T> static T input() { return input<T>(""); }
 
-                return num;
-            }
+  template <typename T> static T input(std::string str) {
+    T input_str{};
+    bool flag = true;
+    while (flag) {
+      std::cout << str;
+      if (std::cin >> input_str) {
+        flag = false;
+      } else {
+        std::cin.clear();
+        while (std::cin.get() != '\n')
+          ;
+      }
+    }
 
-        private:
+    return input_str;
+  }
 
-            std::string lable{};
-            std::vector<Menu> menus{};
-            func function = nullptr;
-    };
-}
+private:
+  void run(std::vector<std::any> params);
+
+  std::vector<std::any> params{};
+  std::string lable{};
+  std::vector<Menu> menus{};
+  func function = nullptr;
+};
+} // namespace YMM

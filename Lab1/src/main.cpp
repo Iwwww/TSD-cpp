@@ -31,18 +31,15 @@ void writeData(YMM::MyList list, std::string file_name) {
     file.close();
 }
 
-void append(std::vector<std::any>* params) {
-    // YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
-    auto* list_ptr = (std::any_cast<YMM::MyList*>((*params)[0]));
+void append(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "Input num: ";
     double num = YMM::Menu::input<double>();
     list_ptr->append(num);
-
-    // params = new std::any(list_ptr);
 }
 
-void insert(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void insert(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "input index: ";
     int index = YMM::Menu::input<int>();
     std::cout << "input num: ";
@@ -50,40 +47,39 @@ void insert(std::any* params) {
     list_ptr->insert(index, num);
 }
 
-void pop(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void pop(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "input index: ";
     int index = YMM::Menu::input<int>();
     std::cout << "pop: " << list_ptr->pop(index) << std::endl;
 }
 
-void remove(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void remove(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "input index: ";
     int index = YMM::Menu::input<int>();
     list_ptr->removeItem(index);
 }
 
-void clear(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void clear(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     list_ptr->clear();
 }
 
-void print(std::vector<std::any>* params) {
-    // YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
-    auto* list_ptr = (std::any_cast<YMM::MyList*>((*params)[0]));
+void print(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "list print: ";
     list_ptr->print();
     std::cout << std::endl;
 }
 
-void size(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void size(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "list size: " << list_ptr->size() << std::endl;
 }
 
-void find(std::any* params) {
-    YMM::MyList* list_ptr= std::any_cast<YMM::MyList*>(*params);
+void find(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "input num: ";
     double num = YMM::Menu::input<double>();
     std::cout << "input start range: ";
@@ -93,8 +89,8 @@ void find(std::any* params) {
     std::cout << "founded element: " << list_ptr->find(num, start, end) << std::endl;
 }
 
-void rfind(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void rfind(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     std::cout << "input num: ";
     double num = YMM::Menu::input<double>();
     std::cout << "input start range: ";
@@ -104,8 +100,8 @@ void rfind(std::any* params) {
     std::cout << "founded element: " << list_ptr->find(num, start, end) << std::endl;
 }
 
-void isEmpty(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void isEmpty(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     if (list_ptr->isVoid()) {
          std::cout << "list is Empty" << std::endl;
     } else {
@@ -114,8 +110,8 @@ void isEmpty(std::any* params) {
 }
 
 
-void variantTask(std::any* params) {
-    YMM::MyList* list_ptr = std::any_cast<YMM::MyList*>(*params);
+void variantTask(std::vector<std::any> params) {
+    auto* list_ptr = std::any_cast<YMM::MyList*>(params[0]);
     int size = list_ptr->size();
     double sum = 0;
     for (int i = 0; i < size; i++) {
@@ -142,39 +138,36 @@ int main(int argc, char *argv[]) {
 
     Exception::setLogFileName(log_file);
 
-
     // data
-    /* MyList* list_ptr = new MyList;
-     * list_ptr = loadData(load_data_file); */
     MyList* list_ptr = nullptr;
     list_ptr = loadData(load_data_file);
-    std::vector<std::any>* params = new std::vector<std::any>{
+    std::vector<std::any> params{
         list_ptr
     };
 
-    Menu menu("Main", std::vector<Menu>{
+    Menu menu = Menu("Main", std::vector<Menu>{
             Menu("Add", std::vector<Menu>{
-                    Menu("Append", append)
-                    // Menu("Insert", insert)
+                    Menu("Append", append),
+                    Menu("Insert", insert)
                     }),
             Menu("Put Away", std::vector<Menu>{
-                    // Menu("Pop", pop),
-                    // Menu("Remove", remove),
-                    // Menu("Clear", clear)
+                    Menu("Pop", pop),
+                    Menu("Remove", remove),
+                    Menu("Clear", clear)
                     }),
             Menu("Find", std::vector<Menu>{
-                    // Menu("Find", find),
-                    // Menu("RFind", rfind)
+                    Menu("Find", find),
+                    Menu("RFind", rfind)
                     }),
             Menu("List Info", std::vector<Menu>{
-                    Menu("Print", print)
-                    // Menu("Size", size),
-                    // Menu("Is Empty", isEmpty)
-                    })
-            // Menu("Variant Task", variantTask),
-            });
+                    Menu("Print", print),
+                    Menu("Size", size),
+                    Menu("Is Empty", isEmpty)
+                    }),
+            Menu("Variant Task", variantTask),
+            }, params);
             
-    menu.run(params);
+    menu.run();
 
     writeData(*list_ptr, write_data_file);
 
