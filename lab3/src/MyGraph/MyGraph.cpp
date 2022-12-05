@@ -159,6 +159,11 @@ bool MyGraph::isEuler() {
                 }
             }
         }
+
+        // arrow_count == 0
+        // unlinked vertice
+        if (arrow_count == 0) euler_flag = false;
+
         for (int i = 0; i < this->size(); i++) {
             if (adjacency_matrix[i][vertice]) {
                 arrow_count--;
@@ -169,7 +174,7 @@ bool MyGraph::isEuler() {
     }
     delete []queue;
     return euler_flag;
-} 
+}
 
 std::vector<bool>* MyGraph::init_visited() {
     std::vector<bool>* vec = new std::vector<bool>();

@@ -24,6 +24,7 @@ public:
     void bfs(int vertice);
     // return vertice count
     int size();
+    // return true if Euler path exsists
     bool isEuler();
 
 private:
