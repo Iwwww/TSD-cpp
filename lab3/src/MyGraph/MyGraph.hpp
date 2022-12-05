@@ -26,6 +26,10 @@ public:
     int size();
     // return true if Euler path exsists
     bool isEuler();
+    void setAdjacencyMatrix(std::vector<std::vector<int>>);
+    std::vector<std::vector<int>> getAdjacencyMatrix();
+    void clear();
+    bool isEmpty();
 
 private:
     std::vector<bool>* init_visited();

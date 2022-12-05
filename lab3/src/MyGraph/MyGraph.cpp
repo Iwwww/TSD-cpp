@@ -176,6 +176,21 @@ bool MyGraph::isEuler() {
     return euler_flag;
 }
 
+void MyGraph::setAdjacencyMatrix(std::vector<std::vector<int>> matrix) {
+    this->adjacency_matrix = matrix;
+}
+
+std::vector<std::vector<int>> MyGraph::getAdjacencyMatrix() {
+    return this->adjacency_matrix;
+}
+
+void MyGraph::clear() {
+    this->adjacency_matrix.clear();
+}
+bool MyGraph::isEmpty() {
+    return this->adjacency_matrix.size() ? true : false;
+}
+
 std::vector<bool>* MyGraph::init_visited() {
     std::vector<bool>* vec = new std::vector<bool>();
     for (int i = 0; i < this->size(); i++) {
