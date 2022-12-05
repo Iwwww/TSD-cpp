@@ -8,10 +8,10 @@ MyGraph::~MyGraph() {}
 void MyGraph::addVertice() {
     if (this->size() != 0) {
         std::vector<int> new_vec{};
-        for (int i = 0; i < this->size(); i++) {
+        for (int i = 0; i <= this->size(); i++) {
             new_vec.push_back(0);
         }
-        new_vec.push_back(1);
+        // new_vec.push_back(1);
 
         // add zero for other vertices
         for (auto &v: this->adjacency_matrix) {
@@ -20,7 +20,7 @@ void MyGraph::addVertice() {
 
         this->adjacency_matrix.push_back(new_vec);
     } else {
-        this->adjacency_matrix.push_back(std::vector<int>{1});
+        this->adjacency_matrix.push_back(std::vector<int>{0});
     }
 }
 
