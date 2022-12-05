@@ -204,7 +204,7 @@ void isEmpty(std::vector<std::any> params) {
 void isEuler(std::vector<std::any> params) {
     auto* graph_ptr = std::any_cast<YMM::MyGraph*>(params[0]);
     if (graph_ptr->isEmpty()) {
-        if (graph_ptr->isEuler()) {
+        if (graph_ptr->isEulerPath()) {
              std::cout << "Euler path does exist in the graph" << std::endl;
         } else {
              std::cout << "Euler path does not exist in the graph" << std::endl;

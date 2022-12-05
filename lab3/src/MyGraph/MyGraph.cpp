@@ -133,7 +133,7 @@ int MyGraph::size() {
     return this->adjacency_matrix.size();
 }
 
-bool MyGraph::isEuler() {
+bool MyGraph::isEulerPath() {
     if (this->size() == 0) return 0;
 
     bool euler_flag = true;
@@ -175,6 +175,8 @@ bool MyGraph::isEuler() {
     delete []queue;
     return euler_flag;
 }
+
+// std::vector<std::vector<int>> MyGraph::getEulerPathes() {}
 
 void MyGraph::setAdjacencyMatrix(std::vector<std::vector<int>> matrix) {
     this->adjacency_matrix = matrix;

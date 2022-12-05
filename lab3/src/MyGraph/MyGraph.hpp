@@ -25,7 +25,8 @@ public:
     // return vertice count
     int size();
     // return true if Euler path exsists
-    bool isEuler();
+    bool isEulerPath();
+    std::vector<std::vector<int>> getEulerPathes();
     void setAdjacencyMatrix(std::vector<std::vector<int>>);
     std::vector<std::vector<int>> getAdjacencyMatrix();
     void clear();
@@ -34,6 +35,7 @@ public:
 private:
     std::vector<bool>* init_visited();
     void sub_dfs(int vertice);
+
 
     std::vector<std::vector<int>> adjacency_matrix{};
     std::vector<bool>* visited_ptr = nullptr;
