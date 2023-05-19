@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <algorithm>
+#include <numeric>
 
 namespace YMM {
 class MyGraph {
@@ -29,13 +31,13 @@ public:
     std::vector<std::vector<int>> getEulerPathes();
     void setAdjacencyMatrix(std::vector<std::vector<int>>);
     std::vector<std::vector<int>> getAdjacencyMatrix();
+    int getEdgesCount();
     void clear();
     bool isEmpty();
 
 private:
     std::vector<bool>* init_visited();
     void sub_dfs(int vertice);
-
 
     std::vector<std::vector<int>> adjacency_matrix{};
     std::vector<bool>* visited_ptr = nullptr;

@@ -162,21 +162,38 @@ bool MyGraph::isEulerPath() {
 
         // arrow_count == 0
         // unlinked vertice
-        if (arrow_count == 0) euler_flag = false;
+        if (arrow_count % 2 == 1) euler_flag = false;
 
-        for (int i = 0; i < this->size(); i++) {
-            if (adjacency_matrix[i][vertice]) {
-                arrow_count--;
-            }
-        }
-        // arrow_count != 0
-        if (arrow_count) euler_flag = false;
+        // for (int i = 0; i < this->size(); i++) {
+        //     if (adjacency_matrix[i][vertice]) {
+        //         arrow_count--;
+        //     }
+        // }
+        // // arrow_count != 0
+        // if (arrow_count) euler_flag = false;
     }
     delete []queue;
     return euler_flag;
 }
 
-// std::vector<std::vector<int>> MyGraph::getEulerPathes() {}
+std::vector<std::vector<int>> MyGraph::getEulerPathes() {
+    std::vector<std::vector<int>> pathes{};
+    std::vector<int> path(this->getEdgesCount());
+    std::iota(path.begin(), path.end(), 0);
+
+    do {
+        bool flag = true;
+        // for (int i = 0; i < this->size() - 1; i++) {
+        //     if (!(this->adjacency_matrix[path[i]][path[i + 1]])) {
+        //         flag = false;
+        //         break;
+        //     }
+        // }
+        if (flag) pathes.push_back(path);
+    } while(std::next_permutation(path.begin(), path.end()));
+
+    return pathes;
+}
 
 void MyGraph::setAdjacencyMatrix(std::vector<std::vector<int>> matrix) {
     this->adjacency_matrix = matrix;
@@ -184,6 +201,16 @@ void MyGraph::setAdjacencyMatrix(std::vector<std::vector<int>> matrix) {
 
 std::vector<std::vector<int>> MyGraph::getAdjacencyMatrix() {
     return this->adjacency_matrix;
+}
+
+int MyGraph::getEdgesCount() {
+    int count = 0;
+    for (auto i: adjacency_matrix) {
+        for (auto j: i) {
+            if (j) count++;
+        }
+    }
+    return count / 2;
 }
 
 void MyGraph::clear() {

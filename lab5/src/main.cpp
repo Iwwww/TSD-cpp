@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
     using namespace YMM;
 
     // read args
-    std::string load_data_file = "img1_small.bmp";
+    std::string load_data_file = "test.bmp";
     std::string log_file = "log.log";
     if (argc >= 2) {
         load_data_file = argv[1];

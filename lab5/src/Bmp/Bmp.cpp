@@ -436,7 +436,7 @@ void BMP::printImage(std::vector<BMP::RGBColor> pixelsRGB) const {
             // std::cout << "G:" << G << " ";
             // std::cout << "B:" << B << " " << std::endl;
 
-            int threshold = 50;
+            int threshold = 10;
             if (R < threshold && G < threshold && B < threshold) {
                 Color::Modifier color(Color::FG_DEFAULT);
             } else if (R > G && R > B) {
@@ -450,7 +450,7 @@ void BMP::printImage(std::vector<BMP::RGBColor> pixelsRGB) const {
                 // std::cout << "Blue";
             }
 
-            char symbol = '@';
+            char symbol = '#';
 
             if (!(R < threshold && G < threshold && B < threshold)) {
                 std::cout << color << symbol << " " << def;
